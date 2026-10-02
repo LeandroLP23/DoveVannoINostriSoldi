@@ -424,6 +424,41 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  playwright-pilot:
+    # Pilot measurement, not part of required.
+    name: playwright-pilot
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Measure
+        run: bash scripts/ci/playwright-pilot.sh
+
+      - name: Upload Playwright report and results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: playwright-pilot
+          path: artifacts/playwright/
+          if-no-files-found: ignore
+          retention-days: 14
+
   required:
     name: required
     needs: [static, security, node, etl, etl-snapshots, production, production-core]

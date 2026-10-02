@@ -147,7 +147,7 @@ export function isExpectedAbortedSearchRequest({
   return url.origin === baseOrigin && isSearchEndpoint && Boolean(url.searchParams.get("q")?.trim());
 }
 
-function relevantRequestFailure(request, baseOrigin) {
+export function relevantRequestFailure(request, baseOrigin) {
   const failure = request.failure();
   const resourceType = request.resourceType();
   const requestUrl = request.url();
