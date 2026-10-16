@@ -172,6 +172,16 @@
       },
       {
         "kind": "account",
+        "year": 2024,
+        "documentNumber": 5,
+        "title": "Rendiconto delle entrate e delle spese del Senato per l'anno finanziario 2024",
+        "presentedAt": "2025-12-16",
+        "recordUrl": "https://dati.senato.it/documento/52803",
+        "documentUrl": "https://www.senato.it/service/PDF/PDFServer/BGT/1523173.pdf",
+        "publicationStatus": "metadata-only"
+      },
+      {
+        "kind": "account",
         "year": 2023,
         "documentNumber": 3,
         "title": "Rendiconto delle entrate e delle spese del Senato per l'anno finanziario 2023",

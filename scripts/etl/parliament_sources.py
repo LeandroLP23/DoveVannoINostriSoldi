@@ -656,7 +656,9 @@ def compare_documents(label: str, expected: list[Document], actual: list[Documen
 def online_check(manifest: dict[str, Any], expected_camera: list[Document], expected_senate: list[Document], known_max: int, timeout: int) -> None:
     camera = require_object(manifest["camera"], "manifest.camera")
     actual_camera = download_camera(camera["landingUrl"], timeout)
-    compare_documents("Camera", expected_camera, actual_camera)
+    # The landing page lists only the current documents; older ones are checked by their PDF lock below.
+    listed = {(item.kind, item.year) for item in actual_camera}
+    compare_documents("Camera", [item for item in expected_camera if (item.kind, item.year) in listed], actual_camera)
     for document in expected_camera:
         verify_camera_asset(document, timeout)
 

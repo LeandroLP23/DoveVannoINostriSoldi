@@ -167,6 +167,38 @@ class ParliamentSourceParserTests(unittest.TestCase):
             MODULE.online_check(manifest, camera, senate, known_max, 1)
         self.assertEqual(verify_camera_asset.call_count, len(camera))
 
+    def test_online_check_accepts_a_landing_page_listing_only_current_camera_documents(self) -> None:
+        snapshot = MODULE.load_json(MODULE.SNAPSHOT_PATH)
+        manifest = MODULE.load_json(MODULE.MANIFEST_PATH)
+        camera, senate, known_max = MODULE.validate_manifest(manifest, snapshot)
+        landing = MODULE.parse_camera_documents((FIXTURES / "camera.html").read_text(encoding="utf-8"))
+        self.assertLess(len(landing), len(camera))
+        with (
+            patch.object(MODULE, "download_camera", return_value=landing),
+            patch.object(MODULE, "verify_camera_asset") as verify_camera_asset,
+            patch.object(MODULE, "download_senate", return_value=senate),
+        ):
+            MODULE.online_check(manifest, camera, senate, known_max, 1)
+        self.assertEqual(verify_camera_asset.call_count, len(camera))
+
+    def test_online_check_fails_closed_on_a_changed_current_camera_document(self) -> None:
+        snapshot = MODULE.load_json(MODULE.SNAPSHOT_PATH)
+        manifest = MODULE.load_json(MODULE.MANIFEST_PATH)
+        camera, senate, known_max = MODULE.validate_manifest(manifest, snapshot)
+        payload = (FIXTURES / "camera.html").read_text(encoding="utf-8")
+        for changed in (
+            payload.replace("008/007/INTERO.pdf", "008/009/INTERO.pdf"),
+            payload.replace("Conto consuntivo 2025", "Conto consuntivo 2026"),
+        ):
+            with (
+                self.subTest(changed=changed[:0]),
+                patch.object(MODULE, "download_camera", return_value=MODULE.parse_camera_documents(changed)),
+                patch.object(MODULE, "verify_camera_asset"),
+                patch.object(MODULE, "download_senate", return_value=senate),
+                self.assertRaisesRegex(MODULE.StructuralError, "Camera: il registro ufficiale è cambiato"),
+            ):
+                MODULE.online_check(manifest, camera, senate, known_max, 1)
+
     def test_main_marks_http_503_as_temporarily_unavailable(self) -> None:
         error = urllib.error.HTTPError(
             "https://example.invalid", 503, "unavailable", {}, io.BytesIO()
