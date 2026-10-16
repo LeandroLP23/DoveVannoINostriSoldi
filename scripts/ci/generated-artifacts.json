@@ -335,7 +335,7 @@
       },
       "refreshWorkflow": ".github/workflows/consulenti-refresh.yml",
       "publication": {
-        "branch": "automation/data/consulenti-v4",
+        "branch": "automation/data/consulenti-v5",
         "commitTitle": "chore(data): refresh Consulenti Pubblici snapshot",
         "prTitle": "data: refresh Consulenti Pubblici snapshot",
         "upstreamUrl": "https://consulentipubblici.dfp.gov.it/progetto"

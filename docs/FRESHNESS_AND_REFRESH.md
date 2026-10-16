@@ -150,10 +150,11 @@ l'inventario e mantengono i propri nomi. Dopo il merge di questa modifica,
 non aggiungere commit umani alla branch gestita dal bot.
 
 Il 23 settembre i dati Consulenti sono stati integrati con #615, chiudendo le
-candidate #595 e #607. Dopo la candidata #678 chiusa senza merge su
-`automation/data/consulenti-v3`, Consulenti riparte da
-`automation/data/consulenti-v4`: il publisher non riapre una candidata chiusa
-senza merge e non modifica la vecchia branch. Gli altri nomi restano invariati.
+candidate #595 e #607. Dopo le candidate chiuse senza merge #678
+(`automation/data/consulenti-v3`) e #743 (`automation/data/consulenti-v4`),
+Consulenti riparte da `automation/data/consulenti-v5`: il publisher non riapre
+una candidata chiusa senza merge e non modifica la vecchia branch. Gli altri
+nomi restano invariati.
 
 Dopo push e aggiornamenti della PR, il publisher ripete soltanto le letture:
 al massimo cinque tentativi, con 15 secondi di attesa complessiva fra le chiamate.
